@@ -26,7 +26,9 @@
 - 관계없이
 - 거침없이
 - 기탄없이</textarea><br>
-      <button onclick="clearInput()">Clear Input</button>
+      <button onclick="clearInput()">Clear Input</button><br>
+      <label for="detailsOpen">Open Details by default:</label>
+      <input type="checkbox" id="detailsOpen" name="detailsOpen" onclick="convertMarkdownToHtml()">
     </div>
     <div class="half">
       <h2>HTML</h2>
@@ -44,7 +46,8 @@
 
   function convertMarkdownToHtml() {
     var markdownInput = document.getElementById('markdownInput').value.split('\n');
-    var htmlOutput = `<details open>\n  <summary>${markdownInput[0]}</summary>\n\n  <ul>\n`;
+    var detailsOpen = document.getElementById('detailsOpen').checked;
+    var htmlOutput = `<details${detailsOpen ? ' open' : ''}>\n  <summary>${markdownInput[0]}</summary>\n\n  <ul>\n`;
     var isFirstLine = true;
 
     for (var i = 1; i < markdownInput.length; i++) {
