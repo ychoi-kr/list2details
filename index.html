@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .container {
+      display: flex;
+    }
+    .half {
+      flex: 50%;
+      padding: 10px;
+      height: 600px;
+    }
+    textarea {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="half">
+      <h2>Markdown</h2>
+      <textarea id="markdownInput" oninput="convertMarkdownToHtml()"></textarea>
+    </div>
+    <div class="half">
+      <h2>HTML</h2>
+      <textarea id="htmlOutput" rows="10" cols="50"></textarea><br>
+      <button onclick="copyToClipboard()">Copy HTML</button>
+    </div>
+  </div>
+</body>
+</html>
+<script>
+  function convertMarkdownToHtml() {
+    var markdownInput = document.getElementById('markdownInput').value.split('\n');
+    var htmlOutput = `<details open>\n  <summary>${markdownInput[0]}</summary>\n\n  <ul>\n`;
+    var isFirstLine = true;
+
+    for (var i = 1; i < markdownInput.length; i++) {
+      if (markdownInput[i].charAt(0) === '-') { // If list item
+        var linkIndex = markdownInput[i].indexOf('[');
+        if (linkIndex !== -1) { // If link
+          var linkText = markdownInput[i].slice(linkIndex + 1, markdownInput[i].indexOf(']'));
+          var linkHref = markdownInput[i].slice(markdownInput[i].indexOf('(') + 1, markdownInput[i].indexOf(')'));
+          htmlOutput += `    <li><a href="${linkHref}">${linkText}</a></li>\n`;
+        } else { // If not a link
+          htmlOutput += `    <li>${markdownInput[i].slice(2)}</li>\n`;
+        }
+      } else if (!isFirstLine) { // If not a list item and not the first line
+        htmlOutput += `  </ul>\n  <ul>\n`;
+      }
+      isFirstLine = false;
+    }
+
+    htmlOutput += '  </ul>\n</details>\n'; // close the details tag after the entire input
+
+    document.getElementById('htmlOutput').value = htmlOutput;
+  }
+  
+  function copyToClipboard() {
+    var copyText = document.getElementById("htmlOutput");
+
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+
+    /* Alert the copied text */
+    alert("Copied the text: " + copyText.value);
+  }
+</script>
+
