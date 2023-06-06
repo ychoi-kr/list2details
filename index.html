@@ -48,8 +48,8 @@
 - 거침없이
 - 기탄없이</textarea><br>
       <button onclick="clearInput()">Clear Input</button><br>
-      <label for="detailsOpen">Open Details by default:</label>
-      <input type="checkbox" id="detailsOpen" name="detailsOpen" onclick="convertMarkdownToHtml()">
+      <input type="checkbox" id="detailsOpen" name="detailsOpen" onclick="convertMarkdownToHtml()"> Open Details by default<br>
+      <input type="checkbox" id="cssCheckbox" checked onclick="convertMarkdownToHtml()"> Include cursor style for summary
     </div>
     <div class="half">
       <h2>HTML</h2>
@@ -68,7 +68,22 @@
   function convertMarkdownToHtml() {
     var markdownInput = document.getElementById('markdownInput').value.split('\n');
     var detailsOpen = document.getElementById('detailsOpen').checked;
-    var htmlOutput = `<details${detailsOpen ? ' open' : ''}>\n  <summary>${markdownInput[0]}</summary>\n\n  <ul>\n`;
+    var htmlOutput = '';
+
+    if (document.getElementById('cssCheckbox').checked) {
+        htmlOutput += `<style>
+  summary {
+	cursor: pointer;
+  }
+</style>
+`;
+    }
+
+    htmlOutput += `<details${detailsOpen ? ' open' : ''}>
+  <summary>${markdownInput[0]}</summary>
+  
+  <ul>
+`;
     var isFirstLine = true;
 
     for (var i = 1; i < markdownInput.length; i++) {
