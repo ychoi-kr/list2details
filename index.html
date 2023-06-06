@@ -16,11 +16,17 @@
     }
   </style>
 </head>
-<body>
+<body onload="convertMarkdownToHtml()">
   <div class="container">
     <div class="half">
       <h2>Markdown</h2>
-      <textarea id="markdownInput" oninput="convertMarkdownToHtml()"></textarea>
+      <textarea id="markdownInput" rows="10" cols="50" oninput="convertMarkdownToHtml()">‘-없이’로 끝나는 단어
+
+- [값없이](http://example.com/1)
+- 관계없이
+- 거침없이
+- 기탄없이</textarea><br>
+      <button onclick="clearInput()">Clear Input</button>
     </div>
     <div class="half">
       <h2>HTML</h2>
@@ -31,6 +37,11 @@
 </body>
 </html>
 <script>
+  function clearInput() {
+    document.getElementById('markdownInput').value = '';
+    document.getElementById('htmlOutput').value = '';
+  }
+
   function convertMarkdownToHtml() {
     var markdownInput = document.getElementById('markdownInput').value.split('\n');
     var htmlOutput = `<details open>\n  <summary>${markdownInput[0]}</summary>\n\n  <ul>\n`;
